@@ -2,10 +2,17 @@
 	<view>
 		<cu-custom bgColor="bg-informatic-brown" isBack>
 			<block slot="backText">返回</block>
-			<block slot="content">{{io.isMyStep?"操作申请表":"查看申请表"}}</block>
+			<block slot="content">申请表</block>
 		</cu-custom>
 		<lab-Steps :value="io.allSteps"></lab-Steps>
+
 		<form>
+			<view class="cu-bar bg-white solids-bottom">
+				<view class="action text-xl">
+					<text class="cuIcon-title text-blue text-xl"></text>
+					<text class="text-bold text-xl">团队申请实验室</text>
+				</view>
+			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.Owner">
 				<view class="title">申请人名称</view>
 				<input placeholder="三字标题" v-model="io.data.Owner" :disabled="io.fieldAccess.Owner==='r'||!io.isMyStep"></input>
@@ -32,17 +39,23 @@
 					</view>
 				</picker>
 			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.GuideTeacherOpinion">
-				<view class="title">指导老师审核意见</view>
-				<input v-model="io.data.GuideTeacherOpinion" :disabled="io.fieldAccess.GuideTeacherOpinion!=='w'||!io.isMyStep"></input>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.GuideTeacherId">
+			<view class="cu-form-group" v-show="io.fieldAccess.GuideTeacherId&&isStudent">
 				<view class="title">选择指导老师</view>
 				<picker :range="assistInfo.teachers" range-key="RealName" @change="selectTeacher" :disabled="io.fieldAccess.GuideTeacherId!=='w'||!io.isMyStep">
 					<view class="content">
 						{{assistInfo.guideTeacherName}}
 					</view>
 				</picker>
+			</view>
+			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.GuideTeacherOpinion">
+				<view class="action text-xl">
+					<text class="cuIcon-title text-blue text-xl"></text>
+					<text class="text-bold text-xl">指导老师审核</text>
+				</view>
+			</view>
+			<view class="cu-form-group" v-show="io.fieldAccess.GuideTeacherOpinion">
+				<view class="title">指导老师审核意见</view>
+				<input v-model="io.data.GuideTeacherOpinion" :disabled="io.fieldAccess.GuideTeacherOpinion!=='w'||!io.isMyStep"></input>
 			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.GuideTeacher">
 				<view class="title">指导老师姓名</view>
@@ -52,9 +65,15 @@
 				<view class="title">指导老师审核时间</view>
 				<input v-model="io.data.GuideTeacherTime" :disabled="io.fieldAccess.GuideTeacherTime!=='w'||!io.isMyStep"></input>
 			</view>
+			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.ReviewOpinion"> 
+				<view class="action text-xl">
+					<text class="cuIcon-title text-blue text-xl"></text>
+					<text class="text-bold text-xl">管理组老师审核</text>
+				</view>
+			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.ReviewOpinion">
 				<view class="title">管理组审核人意见</view>
-				<input :disabled="io.fieldAccess.ReviewOpinion!=='w'||!io.isMyStep"></input>
+				<input v-model="io.data.ReviewOpinion" :disabled="io.fieldAccess.ReviewOpinion!=='w'||!io.isMyStep"></input>
 			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.Reviewer">
 				<view class="title">管理组审核人名称</view>
@@ -63,6 +82,12 @@
 			<view class="cu-form-group" v-show="io.fieldAccess.ReviewTime">
 				<view class="title">管理组审核时间</view>
 				<input v-model="io.data.ReviewTime" :disabled="io.fieldAccess.ReviewTime!=='w'||!io.isMyStep"></input>
+			</view>
+			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.Director">
+				<view class="action text-xl">
+					<text class="cuIcon-title text-blue text-xl"></text>
+					<text class="text-bold text-xl">中心办公室审核</text>
+				</view>
 			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.Director">
 				<view class="title">中心办公室主任名称</view>
@@ -73,12 +98,18 @@
 				<input v-model="io.data.DirectorOpinion" :disabled="io.fieldAccess.DirectorOpinion!=='w'||!io.isMyStep"></input>
 			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.ExpertOpinion">
-				<view class="title">其他专家意见</view>
+				<view class="title">办公会意见</view>
 				<input v-model="io.data.ExpertOpinion" placeholder="请填写" :disabled="io.fieldAccess.ExpertOpinion!=='w'||!io.isMyStep"></input>
 			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.DirectorTime">
 				<view class="title">中心办公室主任审核时间</view>
 				<input v-model="io.data.DirectorTime" :disabled="io.fieldAccess.DirectorTime!=='w'||!io.isMyStep"></input>
+			</view>
+			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.HandlerName">
+				<view class="action text-xl">
+					<text class="cuIcon-title text-blue text-xl"></text>
+					<text class="text-bold text-xl">实验室管理员审核</text>
+				</view>
 			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.HandlerName">
 				<view class="title">实验室管理人员名称</view>
@@ -105,12 +136,14 @@
 			</view>
 		</view>
 		<labTimeLine :timeline="io.timelines" v-show="displayTimeline"></labTimeLine>
-		<view v-if="io.isMyStep" class="margin-top">
-			<button @click="onSubmit()" v-if="io.submitBtns.length===1">{{io.submitBtns[0].Text}}</button>
-			<view class="cu-list grid" :class="['col-'+io.submitBtns.length]" v-else>
-				<view v-for="(item,index) in io.submitBtns" class="cu-item" @click="onSubmit(item)" :key="index">
-					<view :class="item.Icon"></view>
-					<text>{{item.Text}}</text>
+		<view v-if="io.isMyStep">
+			<button class="flex-sub bg-cyan margin-top" @click="onSubmit()" v-if="io.submitBtns.length===1">{{io.submitBtns[0].Text}}</button>
+			<view style="height: 180rpx; width: 100%;" v-else>
+				<view class="flex-sub cu-list grid cu-bar foot" :class="['col-'+io.submitBtns.length]">
+					<view v-for="(item,index) in io.submitBtns" class="cu-item" @click="onSubmit(item)" :key="index">
+						<view :class="item.Icon"></view>
+						<text>{{item.Text}}</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -130,6 +163,7 @@
 					roomDic[value.ID] = value.Name;
 				});
 				roomDic['00000000-0000-0000-0000-000000000000'] = '请选择房间号';
+				console.log(roomDic);
 				uni.setStorage({
 					key: 'roomDic',
 					data: roomDic
@@ -149,18 +183,32 @@
 					this.roomDic = res.data;
 				}
 			});
-			uni.getStorage({
+			/*uni.getStorage({
 				key: 'teacherDic',
 				success: (res) => {
 					this.teacherDic = res.data;
 				}
-			});
+			});*/
 			if (opt.create) {
-				uni.post("/api/workflow/CreateInstance", {
-					workflowName: "按团队申请实验室"
-				}, msg => {
-					this.io = msg;
-				});
+				this.displayTimeline = false;
+				uni.getStorage({
+					key: 'labid',
+					success: (res) => {
+						let id = res.data;
+						uni.post("/api/roomApp/v1/Applicate", {
+							id
+						}, msg => {
+							this.io = msg;
+							for (let role in this.io.data.OwnerRoles) {
+								if (this.io.data.OwnerRoles[role] === "老师") {
+									this.isStudent = false;
+									break;
+								}
+							}
+							console.log(this.isStudent);
+						});
+					}
+				})
 			} else {
 				uni.getStorage({
 					key: 'jmpInfo',
@@ -169,11 +217,11 @@
 							detail: true
 						}, msg => {
 							this.io = msg;
-							if(this.io.intstanceState===5){
-								for(let index in this.io.allSteps){
-									if(this.io.allSteps[index].status===0){
-										this.io.allSteps[index-1].status=30;
-										this.io.timelines[0].steps[0].State=4;
+							if (this.io.intstanceState === 5) {
+								for (let index in this.io.allSteps) {
+									if (this.io.allSteps[index].status === 0) {
+										this.io.allSteps[index - 1].status = 30;
+										this.io.timelines[0].steps[0].State = 4;
 										break;
 									}
 								}
@@ -185,28 +233,52 @@
 		},
 		methods: {
 			onSubmit(item) {
-				if (item) {
-					this.io.data[item.Field] = item.Value;
-				}
-				this.io.shouldUpload.forEach(value => {
-					this.upLoad[value] = this.io[value] || this.io.data[value]
-				});
-				uni.post("/api/workflow/SubmitInstance", { ...this.upLoad
-				}, msg => {
-					if (msg.success === true) {
-						uni.showToast({
-							title: '提交成功',
-							icon: 'success',
-							position: 'center'
-						});
-						setTimeout(function() {
-							uni.navigateBack({
-
-							});
-							uni.hideToast();
-						}, 1500);
+				if (this.isStudent && this.io.data.GuideTeacherId === "00000000-0000-0000-0000-000000000000" && this.io.currentStep ===
+					"填写申请表") {
+					uni.showToast({
+						title: '必须选择指导老师',
+						icon: 'none',
+						position: 'center'
+					});
+					setTimeout(function() {
+						uni.hideToast();
+					}, 1500);
+				} else {
+					if (item) {
+						this.io.data[item.Field] = item.Value;
 					}
-				})
+					this.io.shouldUpload.forEach(value => {
+						this.upLoad[value] = this.io[value] || this.io.data[value]
+					});
+					uni.post("/api/workflow/SubmitInstance", { ...this.upLoad
+					}, msg => {
+						if (msg.success === true) {
+							uni.showToast({
+								title: '提交成功',
+								icon: 'success',
+								position: 'center'
+							});
+							setTimeout(function() {
+								uni.navigateBack({
+					
+								});
+								uni.hideToast();
+							}, 1500);
+						} else {
+							uni.showToast({
+								title: msg.msg,
+								icon: 'none',
+								position: 'center'
+							});
+							setTimeout(function() {
+								uni.navigateBack({
+								
+								});
+								uni.hideToast();
+							}, 3000);
+						}
+					})
+				}
 			},
 			selectBuilding(e) {
 				let column = e.detail.column
@@ -234,8 +306,8 @@
 				this.selectDateTime();
 				console.log(this.io.data)
 			},
-			foldUp(){
-				this.displayTimeline=!this.displayTimeline;
+			foldUp() {
+				this.displayTimeline = !this.displayTimeline;
 			}
 		},
 		data() {
@@ -248,7 +320,7 @@
 					allSteps: [],
 					isMyStep: false,
 					timelines: [],
-					intstanceState:''
+					intstanceState: ''
 				},
 				assistInfo: {
 					buildings: [],
@@ -263,6 +335,7 @@
 				roomDic: {},
 				teacherDic: {},
 				showPicker: false,
+				isStudent: true
 			}
 		}
 	}
