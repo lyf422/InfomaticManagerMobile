@@ -9,14 +9,14 @@
 					return (ps && ps.indexOf(p)) >= 0;
 				}
 				// this.loginSuccess(app.userInfo.currentUserGuid);
-				uni.navigateTo({
-					url: app.dashboard
-				})
 			} else {
-				uni.navigateTo({
-					url: "/iuc/index/index"
-					// url: "uc/login/login"
-				})
+				if (process.env.NODE_ENV === "production") {
+					window.location.href = window.location.protocol + "//" + window.location.host + "/r/RcR21D";
+				} else {
+					uni.navigateTo({
+						url: "iuc/profile/profile"
+					})
+				}
 			}
 		},
 		onLaunch: function() {

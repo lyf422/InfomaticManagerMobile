@@ -5,9 +5,9 @@ uni.get = (url, params, callback) => {
 		url: app.domain + url,
 		data: {
 			...params,
-			currentUserGuid: app.currentUserGuid
+			deviceKey: app.currentUserGuid
 		},
-		success (res) {
+		success(res) {
 			if (typeof callback === 'function') {
 				callback(res.data);
 			}
@@ -21,17 +21,32 @@ uni.post = (url, params, callback) => {
 		method: "POST",
 		data: {
 			...params,
-			currentUserGuid: app.currentUserGuid
+			deviceKey: app.currentUserGuid
 		},
 		header: {
 			'content-type': "application/x-www-form-urlencoded"
 		},
-		success (res) {
+		success(res) {
 			if (typeof callback === 'function') {
 				callback(res.data);
 			}
 		}
 	})
+}
+
+uni.syncPost = async (url, params, callback) => {
+	let [err, res] = await uni.request({
+		url: app.domain + url,
+		method: "POST",
+		data: {
+			...params,
+			deviceKey: app.currentUserGuid
+		},
+		header: {
+			'content-type': "application/x-www-form-urlencoded"
+		}
+	})
+	return res.data;
 }
 
 uni.postStream = (url, params, callback) => {
@@ -40,12 +55,32 @@ uni.postStream = (url, params, callback) => {
 		method: "POST",
 		data: {
 			...params,
-			currentUserGuid: app.currentUserGuid
+			deviceKey: app.currentUserGuid
 		},
-		success (res) {
+		success(res) {
 			if (typeof callback === 'function') {
 				callback(res.data);
 			}
 		}
 	})
+}
+
+uni.showMessage = (title, deltaNum, backUrl, icon) => {
+	uni.showToast({
+		title: title,
+		icon: icon || 'none',
+		position: 'center'
+	});
+	setTimeout(function() {
+		if (backUrl) {
+			uni.navigateBack({
+				url: backUrl
+			});
+		} else if (deltaNum) {
+			uni.navigateBack({
+				delta: deltaNum
+			});
+		}
+		uni.hideToast();
+	}, 3000);
 }

@@ -12,47 +12,40 @@
 					<text class="text-bold text-xl">个人申请实验室</text>
 				</view>
 			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.Owner">
-				<view class="title">申请人名称</view>
-				<input placeholder="三字标题" v-model="io.data.Owner" :disabled="io.fieldAccess.Owner==='r'||!io.isMyStep"></input>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.OwnerRoles">
-				<view class="title">申请人身份<text class="content padding-left" v-for="(item,index) in io.data.OwnerRoles" :key="index">{{item}}</text></view>
-			</view>
-			<view class="cu-form-group" @click="selectDateTime(io.fieldAccess.StartDate)" v-show="io.fieldAccess.StartDate">
-				<view class="title">申请时段</view>
-				<text style="flex: 1;">{{!io.data.StartDate?"请选择申请时段"
-				:io.data.StartDate+'&nbsp;至&nbsp;'+io.data.EndDate}}</text>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.Telephone">
-				<view class="title">申请人电话</view>
-				<input placeholder="三字标题" v-model="io.data.Telephone" :disabled="io.fieldAccess.Telephone==='r'||!io.isMyStep"></input>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.ApplicationReason">
-				<view class="title">申请事由</view>
-				<input placeholder="三字标题" v-model="io.data.ApplicationReason" :disabled="io.fieldAccess.ApplicationReason==='r'||!io.isMyStep"></input>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.SeatId">
-				<view class="title">机位</view>
-				<picker mode="selector" :range="assistInfo.seats" range-key="Code" @change="selectSeat" :disabled="io.fieldAccess.SeatId==='r'||io.isMyStep">
-					<view class="content">
-						{{seatsDic[io.data.SeatId]}}
-					</view>
-				</picker>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.SeatInfo">
-				<view class="title">
-					机位信息
-					<text class="content padding-left">{{io.data.SeatInfo.building.Name}}{{io.data.SeatInfo.room.Name}}{{io.data.SeatInfo.seat.Code}}</text>
+			<view class="form1">
+				<view class="cu-form-group" v-show="io.fieldAccess.Owner">
+					<view class="title">申请人名称</view>
+					<input placeholder="请输入申请人名称" v-model="io.data.Owner" :disabled="io.fieldAccess.Owner==='r'||!io.isMyStep"></input>
 				</view>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.GuideTeacherId&&isStudent">
-				<view class="title">选择指导老师</view>
-				<picker :range="assistInfo.teachers" range-key="RealName" @change="selectTeacher" :disabled="io.fieldAccess.GuideTeacherId!=='w'||!io.isMyStep">
-					<view class="content">
-						{{assistInfo.guideTeacherName}}
-					</view>
-				</picker>
+				<view class="cu-form-group" v-show="io.fieldAccess.OwnerRoles">
+					<view class="title">申请人身份</view>
+					<text style="flex: 1;" v-for="(item,index) in io.data.OwnerRoles" :key="index">{{item}}</text>
+				</view>
+				<view class="cu-form-group" @click="selectDateTime(io.fieldAccess.StartDate)" v-show="io.fieldAccess.StartDate">
+					<view class="title">申请时段</view>
+					<text style="flex: 1;">{{!io.data.StartDate?"请选择申请时段"
+					:io.data.StartDate+'&nbsp;至&nbsp;'+io.data.EndDate}}</text>
+				</view>
+				<view class="cu-form-group" v-show="io.fieldAccess.Telephone">
+					<view class="title">申请人电话</view>
+					<input placeholder="请输入申请人电话" v-model="io.data.Telephone" :disabled="io.fieldAccess.Telephone==='r'||!io.isMyStep"></input>
+				</view>
+				<view class="cu-form-group" v-show="io.fieldAccess.ApplicationReason">
+					<view class="title">申请事由</view>
+					<input placeholder="请输入申请事由" v-model="io.data.ApplicationReason" :disabled="io.fieldAccess.ApplicationReason==='r'||!io.isMyStep"></input>
+				</view>
+				<view class="cu-form-group" v-show="io.fieldAccess.SeatInfo">
+					<view class="title">机位信息</view>
+					<text style="flex: 1;">{{`${io.data.SeatInfo.building.Name}-${io.data.SeatInfo.room.Name}-${io.data.SeatInfo.seat.Code}机位`}}</text>
+				</view>
+				<view class="cu-form-group" v-show="io.fieldAccess.GuideTeacherId&&isStudent">
+					<view class="title">指导老师</view>
+					<picker :range="assistInfo.teachers" range-key="RealName" @change="selectTeacher" :disabled="io.fieldAccess.GuideTeacherId!=='w'||!io.isMyStep">
+						<view class="content">
+							{{assistInfo.guideTeacherName}}
+						</view>
+					</picker>
+				</view>
 			</view>
 			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.GuideTeacherOpinion">
 				<view class="action text-xl">
@@ -72,15 +65,11 @@
 				<view class="title">指导老师审核时间</view>
 				<input v-model="io.data.GuideTeacherTime" :disabled="io.fieldAccess.GuideTeacherTime!=='w'||!io.isMyStep"></input>
 			</view>
-			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.ReviewOpinion"> 
+			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.Reviewer">
 				<view class="action text-xl">
 					<text class="cuIcon-title text-blue text-xl"></text>
 					<text class="text-bold text-xl">管理组老师审核</text>
 				</view>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.ReviewOpinion">
-				<view class="title">管理组审核人意见</view>
-				<input v-model="io.data.ReviewOpinion" :disabled="io.fieldAccess.ReviewOpinion!=='w'||!io.isMyStep"></input>
 			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.Reviewer">
 				<view class="title">管理组审核人名称</view>
@@ -90,38 +79,50 @@
 				<view class="title">管理组审核时间</view>
 				<input v-model="io.data.ReviewTime" :disabled="io.fieldAccess.ReviewTime!=='w'||!io.isMyStep"></input>
 			</view>
-			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.Director">
-				<view class="action text-xl">
-					<text class="cuIcon-title text-blue text-xl"></text>
-					<text class="text-bold text-xl">中心办公室审核</text>
-				</view>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.Director">
-				<view class="title">中心办公室主任名称</view>
-				<input v-model="io.data.Director" :disabled="io.fieldAccess.Director!=='w'||!io.isMyStep"></input>
-			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.DirectorOpinion">
-				<view class="title">中心办公室主任意见</view>
-				<input v-model="io.data.DirectorOpinion" :disabled="io.fieldAccess.DirectorOpinion!=='w'||!io.isMyStep"></input>
-			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.ExpertOpinion">
 				<view class="title">办公会意见</view>
 				<input v-model="io.data.ExpertOpinion" placeholder="请填写" :disabled="io.fieldAccess.ExpertOpinion!=='w'||!io.isMyStep"></input>
 			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.DirectorTime">
-				<view class="title">中心办公室主任审核时间</view>
-				<input v-model="io.data.DirectorTime" :disabled="io.fieldAccess.DirectorTime!=='w'||!io.isMyStep"></input>
+			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.DevDirector">
+				<view class="action text-xl">
+					<text class="cuIcon-title text-blue text-xl"></text>
+					<text class="text-bold text-xl">分管科创副主任审批</text>
+				</view>
+			</view>
+			<view class="cu-form-group" v-show="io.fieldAccess.DevDirector">
+				<view class="title">审核人名称</view>
+				<input v-model="io.data.DevDirector" :disabled="io.fieldAccess.DevDirector!=='w'||!io.isMyStep"></input>
+			</view>
+			<view class="cu-form-group" v-show="io.fieldAccess.DevDirectorTime">
+				<view class="title">审核时间</view>
+				<input v-model="io.data.DevDirectorTime" :disabled="io.fieldAccess.DevDirectorTime!=='w'||!io.isMyStep"></input>
+			</view>
+			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.ManageDirector">
+				<view class="action text-xl">
+					<text class="cuIcon-title text-blue text-xl"></text>
+					<text class="text-bold text-xl">分管实验室管理副主任审批</text>
+				</view>
+			</view>
+			<view class="cu-form-group" v-show="io.fieldAccess.ManageDirector">
+				<view class="title">审核人名称</view>
+				<input v-model="io.data.ManageDirector" :disabled="io.fieldAccess.ManageDirector!=='w'||!io.isMyStep"></input>
+			</view>
+			<view class="cu-form-group" v-show="io.fieldAccess.ManageDirectorTime">
+				<view class="title">审核时间</view>
+				<input v-model="io.data.ManageDirectorTime" :disabled="io.fieldAccess.ManageDirectorTime!=='w'||!io.isMyStep"></input>
+			</view>
+			<view class="cu-bar bg-white solids-bottom margin-top" v-show="io.fieldAccess.HandlerName">
+				<view class="action text-xl">
+					<text class="cuIcon-title text-blue text-xl"></text>
+					<text class="text-bold text-xl">实验室管理员审核</text>
+				</view>
 			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.HandlerName">
 				<view class="title">实验室管理人员名称</view>
 				<input v-model="io.data.HandlerName" :disabled="io.fieldAccess.HandlerName!=='w'||!io.isMyStep"></input>
 			</view>
-			<view class="cu-form-group" v-show="io.fieldAccess.HandleOpinion">
-				<view class="title">实验室管理人员意见</view>
-				<input v-model="io.data.HandleOpinion" :disabled="io.fieldAccess.HandleOpinion!=='w'||!io.isMyStep"></input>
-			</view>
 			<view class="cu-form-group" v-show="io.fieldAccess.HandleTime">
-				<view class="title">实验室管理人员审核时间</view>
+				<view class="title">审核时间</view>
 				<input v-model="io.data.HandleTime" :disabled="io.fieldAccess.HandleTime!=='w'||!io.isMyStep"></input>
 			</view>
 		</form>
@@ -159,21 +160,6 @@
 					...this.assistInfo,
 					...msg
 				};
-				let roomDic = {};
-				this.assistInfo.rooms.forEach(value => {
-					roomDic[value.ID] = value.Name;
-				});
-				roomDic['00000000-0000-0000-0000-000000000000'] = '请选择房间号';
-				uni.setStorage({
-					key: 'roomDic',
-					data: roomDic
-				});
-			});
-			uni.getStorage({
-				key: 'roomDic',
-				success: (res) => {
-					this.roomDic = res.data;
-				}
 			});
 			if (opt.create) {
 				this.displayTimeline = false;
@@ -191,32 +177,9 @@
 										this.isStudent = false;
 										break;
 									}
-								}
-								uni.post("/api/building/GetSeats", {
-									ID: id
-								}, msg => {
-									let seatsDic = {};
-									this.assistInfo.seats = msg.data;
-									this.assistInfo.seats.forEach(value => {
-										seatsDic[value.ID] = value.Code;
-									});
-									seatsDic['00000000-0000-0000-0000-000000000000'] = '请选择机位';
-									uni.setStorage({
-										key: 'seatsDic',
-										data: seatsDic
-									});
-								})
+								};
 							} else {
-								uni.showToast({
-									icon: 'none',
-									title: msg.msg
-								});
-								setTimeout(function() {
-									uni.navigateBack({
-										delta: 1
-									});
-									uni.hideToast();
-								}, 1500);
+								uni.showMessage(msg.msg, 1);
 							}
 						});
 					}
@@ -229,20 +192,12 @@
 							detail: true
 						}, msg => {
 							this.io = msg;
-							uni.post("/api/building/GetSeats", {
-								ID: this.io.data.SeatInfo.room.ID
-							}, msg => {
-								let seatsDic = {};
-								this.assistInfo.seats = msg.data;
-								this.assistInfo.seats.forEach(value => {
-									seatsDic[value.ID] = value.Code;
-								});
-								seatsDic['00000000-0000-0000-0000-000000000000'] = '请选择机位';
-								uni.setStorage({
-									key: 'seatsDic',
-									data: seatsDic
-								});
-							})
+							for (let role in this.io.data.OwnerRoles) {
+								if (this.io.data.OwnerRoles[role] === "老师") {
+									this.isStudent = false;
+									break;
+								}
+							};
 							if (this.io.intstanceState === 5) {
 								for (let index in this.io.allSteps) {
 									if (this.io.allSteps[index].status === 0) {
@@ -256,56 +211,40 @@
 					}
 				});
 			};
-			uni.getStorage({
-				key: 'seatsDic',
-				success: (res) => {
-					this.seatsDic = res.data;
-				}
-			});
 		},
 		methods: {
-			onSubmit(item) {
+			formValidate() {
+				let errors = [];
 				if (this.isStudent && this.io.data.GuideTeacherId === "00000000-0000-0000-0000-000000000000" && this.io.currentStep ===
 					"填写申请表") {
-					uni.showToast({
-						title: '必须选择指导老师',
-						icon: 'none',
-						position: 'center'
-					});
-					setTimeout(function() {
-						uni.hideToast();
-					}, 1500);
+					errors.push("必须选择指导老师");
+				}
+				if (this.upLoad.Telephone !== undefined && this.io.currentStep ===
+					"填写申请表") {
+					var pat = new RegExp('^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$');
+					if (pat.test(this.upLoad.Telephone) === false)
+						errors.push("请输入正确的电话号码");
+				}
+				return errors;
+			},
+			onSubmit(item) {
+				if (item) {
+					this.io.data[item.Field] = item.Value;
+				}
+				this.io.shouldUpload.forEach(value => {
+					this.upLoad[value] = this.io[value] || this.io.data[value]
+				});
+				let errors = this.formValidate();
+				if (errors.length > 0) {
+					uni.showMessage(errors[0]);
 				} else {
-					if (item) {
-						this.io.data[item.Field] = item.Value;
-					}
-					this.io.shouldUpload.forEach(value => {
-						this.upLoad[value] = this.io[value] || this.io.data[value]
-					});
 					uni.post("/api/workflow/SubmitInstance", {
 						...this.upLoad
 					}, msg => {
 						if (msg.success) {
-							uni.showToast({
-								title: '提交成功',
-								icon: 'success',
-								position: 'center'
-							});
-							setTimeout(function() {
-								uni.navigateBack({
-									delta: 1
-								});
-								uni.hideToast();
-							}, 1500);
+							uni.showMessage('提交成功', 1, '', 'success');
 						} else {
-							uni.showToast({
-								icon: 'none',
-								title: msg.msg
-							});
-							setTimeout(function() {
-								uni.navigateBack({});
-								uni.hideToast();
-							}, 1500);
+							uni.showMessage(msg.msg);
 						}
 					})
 				}
@@ -372,4 +311,11 @@
 </script>
 
 <style>
+	.form1>view>view {
+		flex-basis: 30%;
+	}
+
+	form>span>view.cu-form-group>view {
+		flex-basis: 40%;
+	}
 </style>

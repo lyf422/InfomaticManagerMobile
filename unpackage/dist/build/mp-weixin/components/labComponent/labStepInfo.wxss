@@ -1,0 +1,1 @@
+.cu-steps .cu-item[class*=text-] .num.loading:after{content:"\E74F"}.cu-steps .cu-item .step-name{width:6em;display:inline-block;overflow:hidden}

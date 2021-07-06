@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "iuc/index/index",
+    "iuc/index/testEntry",
+    "iuc/addressBook/addressBook",
+    "iuc/roomApplication/v2/myApplication",
+    "iuc/roomApplication/v2/roomFlowsCtrl",
+    "iuc/roomApplication/v2/seatFlowsCtrl",
+    "iuc/roomApplication/v2/todoList",
+    "iuc/roomApplication/v2/myAttend",
+    "iuc/roomApplication/v2/allList",
+    "iuc/roomView/labDetail",
+    "iuc/roomView/labList",
+    "iuc/profile/profile",
+    "iuc/userInfo/userInfo",
+    "iuc/userInfo/modifyRealName",
+    "iuc/News/newsList",
+    "iuc/News/newsDetail",
+    "iuc/userInfo/modifyGrade",
+    "iuc/userInfo/modifyMobile",
+    "components/labComponent/labTimeLine",
+    "iuc/epidemicRpt/rptForm",
+    "iuc/alert/developing",
+    "iuc/alert/success",
+    "iuc/alert/fail",
+    "iuc/bindWeChat/bind"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarBackgroundColor": "#0081ff",
+    "navigationBarTitleText": "信息学院平台",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "white"
+  },
+  "usingComponents": {
+    "basics": "/pages/basics/home",
+    "components": "/pages/component/home",
+    "plugin": "/pages/plugin/home",
+    "cu-custom": "/colorui/components/cu-custom",
+    "time-picker": "/components/mx-datepicker/mx-datepicker",
+    "lab-info-card": "/components/labComponent/labInfoCard",
+    "lab-steps": "/components/labComponent/labStepInfo",
+    "lab-time-line": "/components/labComponent/labTimeLine",
+    "sticky": "/components/labComponent/sticky",
+    "nav-tab": "/components/labComponent/navTab"
+  },
+  "sitemapLocation": "sitemap.json"
+}

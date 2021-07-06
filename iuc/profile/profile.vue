@@ -12,8 +12,12 @@
 				</view>
 				<view class="basis-lg margin">
 					<view class="text-white">
-						<text class="text-xxl block margin-bottom-xs">{{userInfo.RealName}}</text>
-						<text>detail information</text>
+						<text class="text-xxl block margin-bottom-xs">
+							{{userInfo.RealName ? userInfo.RealName : "用户未登录"}}
+						</text>
+						<text>
+							{{userInfo.Code ? userInfo.Code : "请先登录"}}
+						</text>
 					</view>
 				</view>
 			</view>
@@ -61,26 +65,26 @@
 					url: "../roomApplication/v2/myAttend",
 					cuIcon: "newshotfill"
 				}, {
-					name: "机位申请",
-					url: "../roomApplication/v2/flowsCtrl?create=true",
+					name: "实验室列表",
+					url: "../roomView/labList?type=-1",
 					cuIcon: "formfill"
 				}, {
-					name: "核心功能",
-					url: "",
-					cuIcon: "timefill"
+					name: "通讯录",
+					url: "../addressBook/addressBook",
+					cuIcon: "card"
 				}],
 				list: [{
 					name: "实验室列表",
-					url: "../roomView/labList",
+					url: "../roomView/labList?type=-1",
 					cuIcon: "presentfill"
-				}, {
+				},{
 					name: "测试入口",
 					url: "../index/testEntry",
 					cuIcon: "babyfill"
 				}, {
-					name: "历史记录",
-					url: "",
-					cuIcon: "newsfill"
+					name: "解绑微信",
+					url: "../bindWeChat/unbind",
+					cuIcon: "unlock"
 				}, {
 					name: "其他功能",
 					url: "",
@@ -96,7 +100,6 @@
 		},
 		methods: {
 			GetInfo() {
-				
 				uni.post("/uc/GetUserInfo", {
 				}, msg => {
 					if (msg.success) {

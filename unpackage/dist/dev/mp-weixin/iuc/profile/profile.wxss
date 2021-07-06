@@ -1,0 +1,24 @@
+.head {
+  height: 360rpx;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  -webkit-filter: blur(8px);
+          filter: blur(8px);
+  position: fixed;
+  z-index: -1;
+}
+.info-bar {
+  height: 360rpx;
+}
+.navs-bar {
+  margin-top: -70rpx;
+  border-radius: 28rpx;
+  box-shadow: 3px 3px 4px rgba(109, 59, 94, 0.3);
+  padding: 10px 20px;
+}
+.cu-list.menu > .cu-item.arrow:before {
+  right: 40px;
+}
+

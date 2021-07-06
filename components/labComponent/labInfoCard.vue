@@ -3,7 +3,7 @@
 		<view class="shadow shadow-lg bg-white bg-color">
 			<view class="flex padding-lr justify-between align-center padding-tb-xs">
 				<view class="logo" :style="{ backgroundImage: `url('${icon}')`}"></view>
-				<view class="text-xxl text-white">{{lab.RoomCode}}</view>
+				<view class="text-xxl text-white">{{showCode}}</view>
 			</view>
 			<view class="text-black bg-gray padding-tb text-center">
 				<text class="text-bold text-xxl">{{lab.Name}}</text>
@@ -32,6 +32,16 @@
 				type: Boolean
 			},
 			color:""
+		},
+		computed: {
+			showCode () {
+				let lab = this.lab;
+				if (lab.RoomDisplayState === '空闲') {
+					return lab.RoomCode
+				} else {
+					return lab.RoomDisplayState
+				}
+			}
 		},
 		methods:{
 			labDetail(id) {

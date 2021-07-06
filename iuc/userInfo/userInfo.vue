@@ -11,14 +11,14 @@
 					<view class="detail-info">
 						<image :src="avatar" mode="aspectFit" class="info-img"></image>
 					</view>
-					<view class="cuIcon-right"></view>
+					<view class="cuIcon-right" style="visibility: hidden;"></view>
 				</navigator>
-				<navigator class="menu_item" url="./modifyRealName">
+				<navigator class="menu_item">
 					<text style="flex:1;">姓名</text>
 					<view class="detail-info">
 						<text>{{userInfo.RealName?userInfo.RealName:"未填写"}}</text>
 					</view>
-					<view class="cuIcon-right"></view>
+					<view class="cuIcon-right" style="visibility: hidden;"></view>
 				</navigator>
 				<navigator class="menu_item" url="./modifyMobile">
 					<text style="flex:1;">手机号码</text>
@@ -27,7 +27,14 @@
 					</view>
 					<view class="cuIcon-right"></view>
 				</navigator>
-				<navigator class="menu_item">
+				<navigator class="menu_item" url="./modifyTel" v-if="userInfo.IsTeacher">
+					<text style="flex:1;">座机号码</text>
+					<view class="detail-info">
+						<text>{{userInfo.Telephone?userInfo.Telephone:"未填写"}}</text>
+					</view>
+					<view class="cuIcon-right"></view>
+				</navigator>
+				<navigator class="menu_item" url="./modifyEmail">
 					<text style="flex:1;">邮箱</text>
 					<view class="detail-info">
 						<text>{{userInfo.Email?userInfo.Email:"未填写"}}</text>
@@ -35,16 +42,23 @@
 					<view class="cuIcon-right"></view>
 				</navigator>
 				<navigator class="menu_item" url="./modifyGrade">
-					<text style="flex:1;">年龄</text>
+					<text style="flex:1;">年级</text>
 					<view class="detail-info">
 						<text>{{userInfo.Grade?userInfo.Grade:"未填写"}}</text>
 					</view>
 					<view class="cuIcon-right"></view>
 				</navigator>
-				<navigator class="menu_item">
+				<!--navigator class="menu_item">
 					<text style="flex:1;">性别</text>
 					<view class="detail-info">
 						<text>{{userInfo.Gender?userInfo.Gender:"未填写"}}</text>
+					</view>
+					<view class="cuIcon-right"></view>
+				</navigator-->
+				<navigator class="menu_item" url="./modifyMajor">
+					<text style="flex:1;">专业</text>
+					<view class="detail-info">
+						<text>{{userInfo.Specialty?userInfo.Specialty:"未填写"}}</text>
 					</view>
 					<view class="cuIcon-right"></view>
 				</navigator>
@@ -60,51 +74,53 @@
 			this.avatar = app.userInfo.avatar;
 			this.currentUserGuid = app.userInfo.token;
 		},
-		onShow(){
+		onShow() {
 			this.GetInfo();
 		},
 		data() {
 			return {
-				avatar:'',
-				currentUserGuid:'',
-				userInfo:''
+				avatar: '',
+				currentUserGuid: '',
+				userInfo: ''
 			};
 		},
 		methods: {
-			GetInfo () {
+			GetInfo() {
 				let currentUserGuid = this.currentUserGuid;
-				uni.post("/uc/GetUserInfo",{currentUserGuid},msg=>{
-					if(msg.success) {
+				uni.post("/uc/GetUserInfo", {
+					currentUserGuid
+				}, msg => {
+					if (msg.success) {
 						this.userInfo = msg.data;
 						uni.setStorage({
-							key:'userInfo',
-							data:msg.data,
+							key: 'userInfo',
+							data: msg.data,
 						});
 					}
-				}
-				)
+				})
 			}
 		},
-		
+
 	}
 </script>
 
 <style lang="scss">
 	@import'../../colorui/icon.css';
-	.info-img
-	{
+
+	.info-img {
 		height: 100upx;
 		width: 100upx;
 		margin: 5px;
 		border-radius: 4px;
 	}
-	.detail-info
-	{
-		display:flex;
-		flex:1;
-		flex-direction:row-reverse;
+
+	.detail-info {
+		display: flex;
+		flex: 1;
+		flex-direction: row-reverse;
 		margin-right: 35rpx;
 	}
+
 	.center_menu {
 		width: 100%;
 		display: inline-block;
@@ -118,7 +134,7 @@
 			display: flex;
 			align-items: center;
 
-			&.navigator-hover{
+			&.navigator-hover {
 				/*按钮点击效果*/
 				background: #B0B0B0;
 			}
@@ -132,6 +148,4 @@
 			}
 		}
 	}
-
-
 </style>

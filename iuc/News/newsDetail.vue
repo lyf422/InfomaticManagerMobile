@@ -19,6 +19,7 @@
 </template>
 
 <script>
+	var jweixin = require('labs/jweixin.js');
 	export default{
 		onLoad(opt)
 		{

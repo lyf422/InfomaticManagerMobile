@@ -1,0 +1,1 @@
+<scroll-view class="cu-steps margin-tb response" scroll-x><block wx:for="{{steps}}" wx:for-item="item" wx:for-index="index" wx:key="id"><view class="{{['cu-item padding-lr',item.color]}}"><text class="{{['num',item.icon]}}" data-index="{{index+1}}"></text><text class="step-name">{{item.stepName}}</text></view></block></scroll-view>
